@@ -1,0 +1,20 @@
+/ProjectSettings
+/UserSettings
+/.vs
+/bin
+/Library
+/Logs
+/obj
+/Packages
+/IfcUnityEditorPlugin.csproj
+/.vsconfig
+/app.config
+/Assembly-CSharp.csproj
+/Assembly-CSharp-Editor.csproj
+/IFC Unity Editor Plugin.sln
+*.meta
+/Assets/Editor/IfcConvert/IfcConvert-macos-64
+/Assets/Editor/IfcConvert/IfcConvert-unix-64
+/Assets/Editor/IfcConvert/IfcConvert-x32.exe
+/Assets/Editor/IfcConvert/IfcConvert-x64.exe
+/Assets/Scenes

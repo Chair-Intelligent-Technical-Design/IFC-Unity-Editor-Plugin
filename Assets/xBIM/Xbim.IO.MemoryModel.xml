@@ -1,0 +1,792 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Xbim.IO.MemoryModel</name>
+    </assembly>
+    <members>
+        <member name="M:Xbim.IO.Memory.MemoryModel.LoadStep21(Xbim.IO.Step21.XbimP21Scanner)">
+            <summary>
+            Core function which loads Step21 data. This override is schema aware
+            and loads model factors based on the data.
+            </summary>
+            <param name="parser">Parser/Scanner</param>
+            <returns>Number of errors</returns>
+        </member>
+        <member name="M:Xbim.IO.Memory.MemoryModel.LoadZip(System.IO.Stream,Xbim.Common.ReportProgressDelegate)">
+            <summary>
+            Loads the content of the model from ZIP archive. If the actual model file inside the archive is XML
+            it is supposed to have an extension containing 'XML' like '.ifcxml', '.stpxml' or similar.
+            </summary>
+            <param name="stream">Input stream of the ZIP archive</param>
+            <param name="progDelegate"></param>
+        </member>
+        <member name="M:Xbim.IO.Memory.MemoryModel.OpenReadStep21(System.String,Microsoft.Extensions.Logging.ILogger,Xbim.Common.ReportProgressDelegate)">
+            <summary>
+            Reads schema version fron the file on the fly inside the parser so it doesn't need to
+            access the file twice.
+            </summary>
+            <param name="file">Input step21 text file</param>
+            <param name="logger">Logger</param>
+            <param name="progressDel">Progress delegate</param>
+            <returns>New memory model</returns>
+        </member>
+        <member name="M:Xbim.IO.Memory.MemoryModel.OpenReadStep21(System.IO.Stream,Microsoft.Extensions.Logging.ILogger,Xbim.Common.ReportProgressDelegate,System.Collections.Generic.IEnumerable{System.String},System.Boolean,System.Boolean)">
+            <summary>
+            Reads schema version from the stream on the fly inside the parser so it doesn't need to
+            access the file twice.
+            </summary>
+            <param name="stream">Input stream for step21 text file</param>
+            <param name="logger">Logger</param>
+            <param name="progressDel">Progress delegate</param>
+            <param name="ignoreTypes">A list of ifc types to skip</param>
+            <param name="allowMissingReferences">Allow referenced entities that are not in the model, default false</param>
+            <param name="keepOrder">When true, serialised file will maintain order of entities from the original file (or order of creation)</param>
+            <returns>New memory model</returns>
+        </member>
+        <member name="M:Xbim.IO.Memory.MemoryModel.SetWorkArounds(Xbim.Common.Step21.IStepFileHeader,Xbim.Common.XbimModelFactors)">
+            <summary>
+            Code to determine model specific workarounds (BIM tool IFC exporter quirks)
+            </summary>
+        </member>
+        <member name="T:Xbim.IO.Memory.MemoryModelProvider">
+            <summary>
+            A simple model provider implementation using the in-memory <see cref="T:Xbim.IO.Memory.MemoryModel"/>
+            </summary>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.configuration.Serialize">
+            <summary>
+            Serializes current configuration object into an XML document
+            </summary>
+            <returns>string XML value</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.configuration.Deserialize(System.String,Xbim.IO.Xml.BsConf.configuration@,System.Exception@)">
+            <summary>
+            Deserializes workflow markup into an configuration object
+            </summary>
+            <param name="xml">string workflow markup to deserialize</param>
+            <param name="obj">Output configuration object</param>
+            <param name="exception">output Exception value if deserialize failed</param>
+            <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.configuration.SaveToFile(System.String,System.Exception@)">
+            <summary>
+            Serializes current configuration object into file
+            </summary>
+            <param name="fileName">full path of outupt xml file</param>
+            <param name="exception">output Exception value if failed</param>
+            <returns>true if can serialize and save into file; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.configuration.LoadFromFile(System.String,Xbim.IO.Xml.BsConf.configuration@,System.Exception@)">
+            <summary>
+            Deserializes xml markup from file into an configuration object
+            </summary>
+            <param name="fileName">string xml file to load and deserialize</param>
+            <param name="obj">Output configuration object</param>
+            <param name="exception">output Exception value if deserialize failed</param>
+            <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.entity.Serialize">
+            <summary>
+            Serializes current entity object into an XML document
+            </summary>
+            <returns>string XML value</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.entity.Deserialize(System.String,Xbim.IO.Xml.BsConf.entity@,System.Exception@)">
+            <summary>
+            Deserializes workflow markup into an entity object
+            </summary>
+            <param name="xml">string workflow markup to deserialize</param>
+            <param name="obj">Output entity object</param>
+            <param name="exception">output Exception value if deserialize failed</param>
+            <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.entity.SaveToFile(System.String,System.Exception@)">
+            <summary>
+            Serializes current entity object into file
+            </summary>
+            <param name="fileName">full path of outupt xml file</param>
+            <param name="exception">output Exception value if failed</param>
+            <returns>true if can serialize and save into file; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.entity.LoadFromFile(System.String,Xbim.IO.Xml.BsConf.entity@,System.Exception@)">
+            <summary>
+            Deserializes xml markup from file into an entity object
+            </summary>
+            <param name="fileName">string xml file to load and deserialize</param>
+            <param name="obj">Output entity object</param>
+            <param name="exception">output Exception value if deserialize failed</param>
+            <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.configurationInclude.Serialize">
+            <summary>
+            Serializes current configurationInclude object into an XML document
+            </summary>
+            <returns>string XML value</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.configurationInclude.Deserialize(System.String,Xbim.IO.Xml.BsConf.configurationInclude@,System.Exception@)">
+            <summary>
+            Deserializes workflow markup into an configurationInclude object
+            </summary>
+            <param name="xml">string workflow markup to deserialize</param>
+            <param name="obj">Output configurationInclude object</param>
+            <param name="exception">output Exception value if deserialize failed</param>
+            <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.configurationInclude.SaveToFile(System.String,System.Exception@)">
+            <summary>
+            Serializes current configurationInclude object into file
+            </summary>
+            <param name="fileName">full path of outupt xml file</param>
+            <param name="exception">output Exception value if failed</param>
+            <returns>true if can serialize and save into file; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.configurationInclude.LoadFromFile(System.String,Xbim.IO.Xml.BsConf.configurationInclude@,System.Exception@)">
+            <summary>
+            Deserializes xml markup from file into an configurationInclude object
+            </summary>
+            <param name="fileName">string xml file to load and deserialize</param>
+            <param name="obj">Output configurationInclude object</param>
+            <param name="exception">output Exception value if deserialize failed</param>
+            <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.attribute.Serialize">
+            <summary>
+            Serializes current attribute object into an XML document
+            </summary>
+            <returns>string XML value</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.attribute.Deserialize(System.String,Xbim.IO.Xml.BsConf.attribute@,System.Exception@)">
+            <summary>
+            Deserializes workflow markup into an attribute object
+            </summary>
+            <param name="xml">string workflow markup to deserialize</param>
+            <param name="obj">Output attribute object</param>
+            <param name="exception">output Exception value if deserialize failed</param>
+            <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.attribute.SaveToFile(System.String,System.Exception@)">
+            <summary>
+            Serializes current attribute object into file
+            </summary>
+            <param name="fileName">full path of outupt xml file</param>
+            <param name="exception">output Exception value if failed</param>
+            <returns>true if can serialize and save into file; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.attribute.LoadFromFile(System.String,Xbim.IO.Xml.BsConf.attribute@,System.Exception@)">
+            <summary>
+            Deserializes xml markup from file into an attribute object
+            </summary>
+            <param name="fileName">string xml file to load and deserialize</param>
+            <param name="obj">Output attribute object</param>
+            <param name="exception">output Exception value if deserialize failed</param>
+            <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.aggregate.Serialize">
+            <summary>
+            Serializes current aggregate object into an XML document
+            </summary>
+            <returns>string XML value</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.aggregate.Deserialize(System.String,Xbim.IO.Xml.BsConf.aggregate@,System.Exception@)">
+            <summary>
+            Deserializes workflow markup into an aggregate object
+            </summary>
+            <param name="xml">string workflow markup to deserialize</param>
+            <param name="obj">Output aggregate object</param>
+            <param name="exception">output Exception value if deserialize failed</param>
+            <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.aggregate.SaveToFile(System.String,System.Exception@)">
+            <summary>
+            Serializes current aggregate object into file
+            </summary>
+            <param name="fileName">full path of outupt xml file</param>
+            <param name="exception">output Exception value if failed</param>
+            <returns>true if can serialize and save into file; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.aggregate.LoadFromFile(System.String,Xbim.IO.Xml.BsConf.aggregate@,System.Exception@)">
+            <summary>
+            Deserializes xml markup from file into an aggregate object
+            </summary>
+            <param name="fileName">string xml file to load and deserialize</param>
+            <param name="obj">Output aggregate object</param>
+            <param name="exception">output Exception value if deserialize failed</param>
+            <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
+        </member>
+        <member name="F:Xbim.IO.Xml.BsConf.content.unspecified">
+            <remarks/>
+        </member>
+        <member name="F:Xbim.IO.Xml.BsConf.content.value">
+            <remarks/>
+        </member>
+        <member name="F:Xbim.IO.Xml.BsConf.content.ref">
+            <remarks/>
+        </member>
+        <member name="F:Xbim.IO.Xml.BsConf.expattribute.unspecified">
+            <remarks/>
+        </member>
+        <member name="F:Xbim.IO.Xml.BsConf.expattribute.doubletag">
+            <remarks/>
+        </member>
+        <member name="F:Xbim.IO.Xml.BsConf.expattribute.attributetag">
+            <remarks/>
+        </member>
+        <member name="F:Xbim.IO.Xml.BsConf.expattribute.typetag">
+            <remarks/>
+        </member>
+        <member name="F:Xbim.IO.Xml.BsConf.expattribute.notag">
+            <remarks/>
+        </member>
+        <member name="F:Xbim.IO.Xml.BsConf.expattribute.notagsimple">
+            <remarks/>
+        </member>
+        <member name="F:Xbim.IO.Xml.BsConf.expattribute.attributecontent">
+            <remarks/>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.inverse.Serialize">
+            <summary>
+            Serializes current inverse object into an XML document
+            </summary>
+            <returns>string XML value</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.inverse.Deserialize(System.String,Xbim.IO.Xml.BsConf.inverse@,System.Exception@)">
+            <summary>
+            Deserializes workflow markup into an inverse object
+            </summary>
+            <param name="xml">string workflow markup to deserialize</param>
+            <param name="obj">Output inverse object</param>
+            <param name="exception">output Exception value if deserialize failed</param>
+            <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.inverse.SaveToFile(System.String,System.Exception@)">
+            <summary>
+            Serializes current inverse object into file
+            </summary>
+            <param name="fileName">full path of outupt xml file</param>
+            <param name="exception">output Exception value if failed</param>
+            <returns>true if can serialize and save into file; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.inverse.LoadFromFile(System.String,Xbim.IO.Xml.BsConf.inverse@,System.Exception@)">
+            <summary>
+            Deserializes xml markup from file into an inverse object
+            </summary>
+            <param name="fileName">string xml file to load and deserialize</param>
+            <param name="obj">Output inverse object</param>
+            <param name="exception">output Exception value if deserialize failed</param>
+            <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
+        </member>
+        <member name="F:Xbim.IO.Xml.BsConf.exptype.unspecified">
+            <remarks/>
+        </member>
+        <member name="F:Xbim.IO.Xml.BsConf.exptype.root">
+            <remarks/>
+        </member>
+        <member name="F:Xbim.IO.Xml.BsConf.exptype.value">
+            <remarks/>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.option.Serialize">
+            <summary>
+            Serializes current option object into an XML document
+            </summary>
+            <returns>string XML value</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.option.Deserialize(System.String,Xbim.IO.Xml.BsConf.option@,System.Exception@)">
+            <summary>
+            Deserializes workflow markup into an option object
+            </summary>
+            <param name="xml">string workflow markup to deserialize</param>
+            <param name="obj">Output option object</param>
+            <param name="exception">output Exception value if deserialize failed</param>
+            <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.option.SaveToFile(System.String,System.Exception@)">
+            <summary>
+            Serializes current option object into file
+            </summary>
+            <param name="fileName">full path of outupt xml file</param>
+            <param name="exception">output Exception value if failed</param>
+            <returns>true if can serialize and save into file; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.option.LoadFromFile(System.String,Xbim.IO.Xml.BsConf.option@,System.Exception@)">
+            <summary>
+            Deserializes xml markup from file into an option object
+            </summary>
+            <param name="fileName">string xml file to load and deserialize</param>
+            <param name="obj">Output option object</param>
+            <param name="exception">output Exception value if deserialize failed</param>
+            <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
+        </member>
+        <member name="F:Xbim.IO.Xml.BsConf.expattributeglobal.doubletag">
+            <remarks/>
+        </member>
+        <member name="F:Xbim.IO.Xml.BsConf.expattributeglobal.attributetag">
+            <remarks/>
+        </member>
+        <member name="F:Xbim.IO.Xml.BsConf.expattributeglobal.attributecontent">
+            <remarks/>
+        </member>
+        <member name="F:Xbim.IO.Xml.BsConf.namingconvention.initialupper">
+            <remarks/>
+        </member>
+        <member name="F:Xbim.IO.Xml.BsConf.namingconvention.camelcase">
+            <remarks/>
+        </member>
+        <member name="F:Xbim.IO.Xml.BsConf.namingconvention.preservecase">
+            <remarks/>
+        </member>
+        <member name="F:Xbim.IO.Xml.BsConf.attributeType.inverse">
+            <remarks/>
+        </member>
+        <member name="F:Xbim.IO.Xml.BsConf.attributeType.derive">
+            <remarks/>
+        </member>
+        <member name="F:Xbim.IO.Xml.BsConf.attributeType.deriveinverse">
+            <remarks/>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.rootEntity.Serialize">
+            <summary>
+            Serializes current rootEntity object into an XML document
+            </summary>
+            <returns>string XML value</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.rootEntity.Deserialize(System.String,Xbim.IO.Xml.BsConf.rootEntity@,System.Exception@)">
+            <summary>
+            Deserializes workflow markup into an rootEntity object
+            </summary>
+            <param name="xml">string workflow markup to deserialize</param>
+            <param name="obj">Output rootEntity object</param>
+            <param name="exception">output Exception value if deserialize failed</param>
+            <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.rootEntity.SaveToFile(System.String,System.Exception@)">
+            <summary>
+            Serializes current rootEntity object into file
+            </summary>
+            <param name="fileName">full path of outupt xml file</param>
+            <param name="exception">output Exception value if failed</param>
+            <returns>true if can serialize and save into file; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.rootEntity.LoadFromFile(System.String,Xbim.IO.Xml.BsConf.rootEntity@,System.Exception@)">
+            <summary>
+            Deserializes xml markup from file into an rootEntity object
+            </summary>
+            <param name="fileName">string xml file to load and deserialize</param>
+            <param name="obj">Output rootEntity object</param>
+            <param name="exception">output Exception value if deserialize failed</param>
+            <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.addAttribute.Serialize">
+            <summary>
+            Serializes current addAttribute object into an XML document
+            </summary>
+            <returns>string XML value</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.addAttribute.Deserialize(System.String,Xbim.IO.Xml.BsConf.addAttribute@,System.Exception@)">
+            <summary>
+            Deserializes workflow markup into an addAttribute object
+            </summary>
+            <param name="xml">string workflow markup to deserialize</param>
+            <param name="obj">Output addAttribute object</param>
+            <param name="exception">output Exception value if deserialize failed</param>
+            <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.addAttribute.SaveToFile(System.String,System.Exception@)">
+            <summary>
+            Serializes current addAttribute object into file
+            </summary>
+            <param name="fileName">full path of outupt xml file</param>
+            <param name="exception">output Exception value if failed</param>
+            <returns>true if can serialize and save into file; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.addAttribute.LoadFromFile(System.String,Xbim.IO.Xml.BsConf.addAttribute@,System.Exception@)">
+            <summary>
+            Deserializes xml markup from file into an addAttribute object
+            </summary>
+            <param name="fileName">string xml file to load and deserialize</param>
+            <param name="obj">Output addAttribute object</param>
+            <param name="exception">output Exception value if deserialize failed</param>
+            <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
+        </member>
+        <member name="F:Xbim.IO.Xml.BsConf.addAttributeUsage.optional">
+            <remarks/>
+        </member>
+        <member name="F:Xbim.IO.Xml.BsConf.addAttributeUsage.required">
+            <remarks/>
+        </member>
+        <member name="F:Xbim.IO.Xml.BsConf.addAttributeUsage.fixed">
+            <remarks/>
+        </member>
+        <member name="F:Xbim.IO.Xml.BsConf.addAttributeUsage.default">
+            <remarks/>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.schema.Serialize">
+            <summary>
+            Serializes current schema object into an XML document
+            </summary>
+            <returns>string XML value</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.schema.Deserialize(System.String,Xbim.IO.Xml.BsConf.schema@,System.Exception@)">
+            <summary>
+            Deserializes workflow markup into an schema object
+            </summary>
+            <param name="xml">string workflow markup to deserialize</param>
+            <param name="obj">Output schema object</param>
+            <param name="exception">output Exception value if deserialize failed</param>
+            <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.schema.SaveToFile(System.String,System.Exception@)">
+            <summary>
+            Serializes current schema object into file
+            </summary>
+            <param name="fileName">full path of outupt xml file</param>
+            <param name="exception">output Exception value if failed</param>
+            <returns>true if can serialize and save into file; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.schema.LoadFromFile(System.String,Xbim.IO.Xml.BsConf.schema@,System.Exception@)">
+            <summary>
+            Deserializes xml markup from file into an schema object
+            </summary>
+            <param name="fileName">string xml file to load and deserialize</param>
+            <param name="obj">Output schema object</param>
+            <param name="exception">output Exception value if deserialize failed</param>
+            <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.additionalObject.Serialize">
+            <summary>
+            Serializes current additionalObject object into an XML document
+            </summary>
+            <returns>string XML value</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.additionalObject.Deserialize(System.String,Xbim.IO.Xml.BsConf.additionalObject@,System.Exception@)">
+            <summary>
+            Deserializes workflow markup into an additionalObject object
+            </summary>
+            <param name="xml">string workflow markup to deserialize</param>
+            <param name="obj">Output additionalObject object</param>
+            <param name="exception">output Exception value if deserialize failed</param>
+            <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.additionalObject.SaveToFile(System.String,System.Exception@)">
+            <summary>
+            Serializes current additionalObject object into file
+            </summary>
+            <param name="fileName">full path of outupt xml file</param>
+            <param name="exception">output Exception value if failed</param>
+            <returns>true if can serialize and save into file; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.additionalObject.LoadFromFile(System.String,Xbim.IO.Xml.BsConf.additionalObject@,System.Exception@)">
+            <summary>
+            Deserializes xml markup from file into an additionalObject object
+            </summary>
+            <param name="fileName">string xml file to load and deserialize</param>
+            <param name="obj">Output additionalObject object</param>
+            <param name="exception">output Exception value if deserialize failed</param>
+            <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.containerObject.Serialize">
+            <summary>
+            Serializes current containerObject object into an XML document
+            </summary>
+            <returns>string XML value</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.containerObject.Deserialize(System.String,Xbim.IO.Xml.BsConf.containerObject@,System.Exception@)">
+            <summary>
+            Deserializes workflow markup into an containerObject object
+            </summary>
+            <param name="xml">string workflow markup to deserialize</param>
+            <param name="obj">Output containerObject object</param>
+            <param name="exception">output Exception value if deserialize failed</param>
+            <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.containerObject.SaveToFile(System.String,System.Exception@)">
+            <summary>
+            Serializes current containerObject object into file
+            </summary>
+            <param name="fileName">full path of outupt xml file</param>
+            <param name="exception">output Exception value if failed</param>
+            <returns>true if can serialize and save into file; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.containerObject.LoadFromFile(System.String,Xbim.IO.Xml.BsConf.containerObject@,System.Exception@)">
+            <summary>
+            Deserializes xml markup from file into an containerObject object
+            </summary>
+            <param name="fileName">string xml file to load and deserialize</param>
+            <param name="obj">Output containerObject object</param>
+            <param name="exception">output Exception value if deserialize failed</param>
+            <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.include.Serialize">
+            <summary>
+            Serializes current include object into an XML document
+            </summary>
+            <returns>string XML value</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.include.Deserialize(System.String,Xbim.IO.Xml.BsConf.include@,System.Exception@)">
+            <summary>
+            Deserializes workflow markup into an include object
+            </summary>
+            <param name="xml">string workflow markup to deserialize</param>
+            <param name="obj">Output include object</param>
+            <param name="exception">output Exception value if deserialize failed</param>
+            <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.include.SaveToFile(System.String,System.Exception@)">
+            <summary>
+            Serializes current include object into file
+            </summary>
+            <param name="fileName">full path of outupt xml file</param>
+            <param name="exception">output Exception value if failed</param>
+            <returns>true if can serialize and save into file; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.include.LoadFromFile(System.String,Xbim.IO.Xml.BsConf.include@,System.Exception@)">
+            <summary>
+            Deserializes xml markup from file into an include object
+            </summary>
+            <param name="fileName">string xml file to load and deserialize</param>
+            <param name="obj">Output include object</param>
+            <param name="exception">output Exception value if deserialize failed</param>
+            <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.namespace.Serialize">
+            <summary>
+            Serializes current namespace object into an XML document
+            </summary>
+            <returns>string XML value</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.namespace.Deserialize(System.String,Xbim.IO.Xml.BsConf.namespace@,System.Exception@)">
+            <summary>
+            Deserializes workflow markup into an namespace object
+            </summary>
+            <param name="xml">string workflow markup to deserialize</param>
+            <param name="obj">Output namespace object</param>
+            <param name="exception">output Exception value if deserialize failed</param>
+            <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.namespace.SaveToFile(System.String,System.Exception@)">
+            <summary>
+            Serializes current namespace object into file
+            </summary>
+            <param name="fileName">full path of outupt xml file</param>
+            <param name="exception">output Exception value if failed</param>
+            <returns>true if can serialize and save into file; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.namespace.LoadFromFile(System.String,Xbim.IO.Xml.BsConf.namespace@,System.Exception@)">
+            <summary>
+            Deserializes xml markup from file into an namespace object
+            </summary>
+            <param name="fileName">string xml file to load and deserialize</param>
+            <param name="obj">Output namespace object</param>
+            <param name="exception">output Exception value if deserialize failed</param>
+            <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
+        </member>
+        <member name="F:Xbim.IO.Xml.BsConf.qual.qualified">
+            <remarks/>
+        </member>
+        <member name="F:Xbim.IO.Xml.BsConf.qual.unqualified">
+            <remarks/>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.type.Serialize">
+            <summary>
+            Serializes current type object into an XML document
+            </summary>
+            <returns>string XML value</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.type.Deserialize(System.String,Xbim.IO.Xml.BsConf.type@,System.Exception@)">
+            <summary>
+            Deserializes workflow markup into an type object
+            </summary>
+            <param name="xml">string workflow markup to deserialize</param>
+            <param name="obj">Output type object</param>
+            <param name="exception">output Exception value if deserialize failed</param>
+            <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.type.SaveToFile(System.String,System.Exception@)">
+            <summary>
+            Serializes current type object into file
+            </summary>
+            <param name="fileName">full path of outupt xml file</param>
+            <param name="exception">output Exception value if failed</param>
+            <returns>true if can serialize and save into file; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.type.LoadFromFile(System.String,Xbim.IO.Xml.BsConf.type@,System.Exception@)">
+            <summary>
+            Deserializes xml markup from file into an type object
+            </summary>
+            <param name="fileName">string xml file to load and deserialize</param>
+            <param name="obj">Output type object</param>
+            <param name="exception">output Exception value if deserialize failed</param>
+            <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.uosElement.Serialize">
+            <summary>
+            Serializes current uosElement object into an XML document
+            </summary>
+            <returns>string XML value</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.uosElement.Deserialize(System.String,Xbim.IO.Xml.BsConf.uosElement@,System.Exception@)">
+            <summary>
+            Deserializes workflow markup into an uosElement object
+            </summary>
+            <param name="xml">string workflow markup to deserialize</param>
+            <param name="obj">Output uosElement object</param>
+            <param name="exception">output Exception value if deserialize failed</param>
+            <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.uosElement.SaveToFile(System.String,System.Exception@)">
+            <summary>
+            Serializes current uosElement object into file
+            </summary>
+            <param name="fileName">full path of outupt xml file</param>
+            <param name="exception">output Exception value if failed</param>
+            <returns>true if can serialize and save into file; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.uosElement.LoadFromFile(System.String,Xbim.IO.Xml.BsConf.uosElement@,System.Exception@)">
+            <summary>
+            Deserializes xml markup from file into an uosElement object
+            </summary>
+            <param name="fileName">string xml file to load and deserialize</param>
+            <param name="obj">Output uosElement object</param>
+            <param name="exception">output Exception value if deserialize failed</param>
+            <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.uosEntity.Serialize">
+            <summary>
+            Serializes current uosEntity object into an XML document
+            </summary>
+            <returns>string XML value</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.uosEntity.Deserialize(System.String,Xbim.IO.Xml.BsConf.uosEntity@,System.Exception@)">
+            <summary>
+            Deserializes workflow markup into an uosEntity object
+            </summary>
+            <param name="xml">string workflow markup to deserialize</param>
+            <param name="obj">Output uosEntity object</param>
+            <param name="exception">output Exception value if deserialize failed</param>
+            <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.uosEntity.SaveToFile(System.String,System.Exception@)">
+            <summary>
+            Serializes current uosEntity object into file
+            </summary>
+            <param name="fileName">full path of outupt xml file</param>
+            <param name="exception">output Exception value if failed</param>
+            <returns>true if can serialize and save into file; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.BsConf.uosEntity.LoadFromFile(System.String,Xbim.IO.Xml.BsConf.uosEntity@,System.Exception@)">
+            <summary>
+            Deserializes xml markup from file into an uosEntity object
+            </summary>
+            <param name="fileName">string xml file to load and deserialize</param>
+            <param name="obj">Output uosEntity object</param>
+            <param name="exception">output Exception value if deserialize failed</param>
+            <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
+        </member>
+        <member name="M:Xbim.IO.Xml.IfcXmlWriter3.Write(Xbim.Common.IModel,System.Xml.XmlWriter,System.Collections.Generic.IEnumerable{Xbim.Common.IPersistEntity})">
+            <summary>
+            This function writes model entities to the defined XML output. 
+            </summary>
+            <param name="model">Model to be used for serialization. If no entities are specified IModel.Instances will be used as a 
+            source of entities to be serialized.</param>
+            <param name="output">Output XML</param>
+            <param name="entities">Optional entities enumerable. If you define this enumerable it will be
+            used instead of all entities from IModel.Instances. This allows to define different way of entities retrieval
+            like volatile instances from persisted DB model</param>
+        </member>
+        <member name="M:Xbim.IO.Xml.XbimXmlReader3.#ctor(Xbim.IO.Xml.GetOrCreateEntity,Xbim.IO.Xml.FinishEntity,Xbim.Common.Metadata.ExpressMetaData)">
+            <summary>
+            Constructor of the reader for IFC2x3 XML. XSD is different for different versions of IFC and there is a major difference
+            between IFC2x3 and IFC4 to there are two different classes to deal with this.
+            </summary>x
+            <param name="create">Delegate which will be used to create new entities</param>
+            <param name="finish">Delegate which will be called once the entity is finished (no changes will be made to it)
+            This is useful for a DB when this is the point when it can be serialized to DB</param>
+            <param name="metadata">Metadata model used to inspect Express types and their properties</param>
+        </member>
+        <member name="P:Xbim.IO.Xml.XbimXmlReader4.IdMap">
+            <summary>
+            This can be used for analytical and file debugging purposes where 
+            relation between XML entity in the file and loaded entity needs
+            to be kept.
+            </summary>
+        </member>
+        <member name="M:Xbim.IO.Xml.XbimXmlReader4.#ctor(Xbim.IO.Xml.GetOrCreateEntity,Xbim.IO.Xml.FinishEntity,Xbim.Common.Metadata.ExpressMetaData,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Constructor of the reader for IFC2x3 XML. XSD is different for different versions of IFC and there is a major difference
+            between IFC2x3 and IFC4 to there are two different classes to deal with this.
+            </summary>x
+            <param name="getOrCreate">Delegate which will be used to getOrCreate new entities</param>
+            <param name="finish">Delegate which will be called once the entity is finished (no changes will be made to it)
+            This is useful for a DB when this is the point when it can be serialized to DB</param>
+            <param name="metadata">Metadata model used to inspect Express types and their properties</param>
+            <param name="logger">A Logger</param>
+        </member>
+        <member name="F:Xbim.IO.Xml.XbimXmlWriter4._ns">
+            <summary>
+            XML namespace
+            </summary>
+        </member>
+        <member name="F:Xbim.IO.Xml.XbimXmlWriter4._nsLocation">
+            <summary>
+            XSD location URI
+            </summary>
+        </member>
+        <member name="F:Xbim.IO.Xml.XbimXmlWriter4._expressUri">
+            <summary>
+            EXPRESS schema definition URI
+            </summary>
+        </member>
+        <member name="F:Xbim.IO.Xml.XbimXmlWriter4._configurationUri">
+            <summary>
+            EXPRESS to XSD convertion configuration file URI
+            </summary>
+        </member>
+        <member name="F:Xbim.IO.Xml.XbimXmlWriter4._nsPrefix">
+            <summary>
+            Namespace prefix
+            </summary>
+        </member>
+        <member name="F:Xbim.IO.Xml.XbimXmlWriter4._rootElementName">
+            <summary>
+            Name of the root element
+            </summary>
+        </member>
+        <member name="M:Xbim.IO.Xml.XbimXmlWriter4.#ctor(Xbim.IO.Xml.XbimXmlSettings)">
+            <summary>
+            Constructor of the XML writer. This writer implements conventions for IFC4 XML and needs to
+            get configuration with speficic cases like inversed inverses and other special cases.
+            Default settings and configuration are for IFC4 Add1. If you pass configuration and settings
+            make sure both are for the same schema definition.
+            </summary>
+            <param name="settings">Settings for writer like namespaces and root element name</param>
+        </member>
+        <member name="M:Xbim.IO.Xml.XbimXmlWriter4.Write(Xbim.Common.IModel,System.Xml.XmlWriter,System.Collections.Generic.IEnumerable{Xbim.Common.IPersistEntity})">
+            <summary>
+            This function writes model entities to the defined XML output. 
+            </summary>
+            <param name="model">Model to be used for serialization. If no entities are specified IModel.Instances will be used as a 
+            source of entities to be serialized.</param>
+            <param name="output">Output XML</param>
+            <param name="entities">Optional entities enumerable. If you define this enumerable it will be
+            used instead of all entities from IModel.Instances. This allows to define different way of entities retrieval
+            like volatile instances from persisted DB model</param>
+        </member>
+        <member name="P:Xbim.IO.Xml.XmlMetaProperty.AttributeSetter">
+            <summary>
+            Delegate to be used to serialize value as an XML attribute. This has to be called
+            BEFORE any nested elements are created.
+            </summary>
+        </member>
+        <member name="M:Xbim.Ifc.ModelProviderExtensions.UseMemoryModelProvider(Xbim.IO.IModelProviderFactory)">
+            <summary>
+            Configures the <see cref="T:Xbim.IO.IModelProviderFactory"/> to use the <see cref="T:Xbim.IO.Memory.MemoryModelProvider"/>
+            </summary>
+            <remarks>Note: The <see cref="T:Xbim.IO.Memory.MemoryModelProvider"/> does not support all storage options. In
+            particular it has no persistance mechanism except from storing back to IFC/IfcXml.
+            If you require 'random access' without always holding the model in memory, another
+            ModelProvider may be required. See Xbim.IO.Esent.HeuristicModelProvider.
+            </remarks>
+            <param name="providerFactory">The <see cref="T:Xbim.IO.IModelProviderFactory"/> to configure</param>
+            <returns>The <see cref="T:Xbim.IO.IModelProviderFactory"/></returns>
+        </member>
+    </members>
+</doc>

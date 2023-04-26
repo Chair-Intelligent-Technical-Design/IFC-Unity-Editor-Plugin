@@ -1,0 +1,478 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Xbim.Ifc</name>
+    </assembly>
+    <members>
+        <member name="T:Xbim.Ifc.DefaultModelProviderFactory">
+            <summary>
+            A default factory that provides an <see cref="T:Xbim.IO.IModelProvider"/>
+            </summary>
+            <remarks>By default, unless Xbim.Esent.IO is referenced the factory will create a <see cref="T:Xbim.IO.Memory.MemoryModelProvider"/>
+            If Esent is loaded, the Heuristic provider is loaded, which provides better scalability.
+            </remarks>
+        </member>
+        <member name="M:Xbim.Ifc.DefaultModelProviderFactory.CreateProvider">
+            <summary>
+            Creates a new <see cref="T:Xbim.IO.IModelProvider"/>
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Xbim.Ifc.DefaultModelProviderFactory.Use(System.Func{Xbim.IO.IModelProvider})">
+            <summary>
+            Hook to allow 3rd parties to explicitly configure another <see cref="T:Xbim.IO.IModelProvider"/> implementation
+            to be provided in place of the default provider
+            </summary>
+            <param name="providerFn">Delegate to provide a new IModelProvider instance</param>
+        </member>
+        <member name="M:Xbim.Ifc.IfcStoreCopyItemsExtensions.InsertCopy(Xbim.Common.IModel,System.Collections.Generic.IEnumerable{Xbim.Ifc4.Interfaces.IIfcProduct},System.Boolean,System.Boolean,Xbim.Common.XbimInstanceHandleMap)">
+            <summary>
+            This is a higher level function which uses InsertCopy function alongside with the knowledge of IFC schema to copy over
+            products with their types and other related information (classification, aggregation, documents, properties) and optionally
+            geometry. It will also bring in spatial hierarchy relevant to selected products. However, resulting model is not guaranteed 
+            to be compliant with any Model View Definition unless you explicitly check the compliance. Context of a single product tend to 
+            consist from hundreds of objects which need to be identified and copied over so this operation might be potentially expensive.
+            You should never call this function more than once between two models. It not only selects objects to be copied over but also
+            excludes other objects from being copied over so that it doesn't bring the entire model in a chain dependencies. This means
+            that some objects are modified (like spatial relations) and won't get updated which would lead to an inconsistent copy.
+            </summary>
+            <param name="model">The target model</param>
+            <param name="products">Products from other model to be inserted into this model</param>
+            <param name="includeGeometry">If TRUE, geometry of the products will be copied over.</param>
+            <param name="keepLabels">If TRUE, entity labels from original model will be used. Always set this to FALSE
+            if you are going to insert products from multiple source models or if you are going to insert products to a non-empty model</param>
+            <param name="mappings">Mappings to avoid multiple insertion of objects. Keep a single instance for insertion between two models.
+            If you also use InsertCopy() function for some other insertions, use the same instance of mappings.</param>
+        </member>
+        <member name="M:Xbim.Ifc.IfcStoreExportExtensions.SaveAsIfc(Xbim.Common.IModel,System.IO.Stream,Xbim.Common.ReportProgressDelegate)">
+            <summary>
+            Saves a model as a STEP IFC file
+            </summary>
+            <param name="model"></param>
+            <param name="stream"></param>
+            <param name="progDelegate"></param>
+        </member>
+        <member name="M:Xbim.Ifc.IfcStoreExportExtensions.SaveAsIfcXml(Xbim.Common.IModel,System.IO.Stream,Xbim.Common.ReportProgressDelegate)">
+            <summary>
+            Saves a model as IfcXML file
+            </summary>
+            <param name="model"></param>
+            <param name="stream"></param>
+            <param name="progDelegate"></param>
+        </member>
+        <member name="M:Xbim.Ifc.IfcStoreExportExtensions.SaveAsIfcZip(Xbim.Common.IModel,System.IO.Stream,System.String,Xbim.IO.StorageType,Xbim.Common.ReportProgressDelegate)">
+            <summary>
+            Saves a model as a Zipped IFC file
+            </summary>
+            <param name="model">The model to export</param>
+            <param name="stream">The stream will be closed and flushed on return</param>
+            <param name="zipEntryName">The name of the file zipped inside the file</param>
+            <param name="storageType">Specify IfcZip and then either IfcXml or Ifc</param>
+            <param name="progDelegate"></param>
+        </member>
+        <member name="M:Xbim.Ifc.IfcStoreGeometryExtensions.SaveAsWexBim(Xbim.Common.IModel,System.IO.BinaryWriter,System.Collections.Generic.IEnumerable{Xbim.Ifc4.Interfaces.IIfcProduct},Xbim.Common.Geometry.IVector3D)">
+            <summary>
+            This function is used to generate the .wexbim model files.
+            </summary>
+            <param name="model">The model to export</param>
+            <param name="binaryStream">An open writable streamer.</param>
+            <param name="products">Optional products to be written to the wexBIM file. If null, all products from the model will be saved</param>
+            <param name="translation">Optional 3D vector to apply</param>
+        </member>
+        <member name="M:Xbim.Ifc.IfcStoreGeometryExtensions.Translate(Xbim.Common.Geometry.XbimMatrix3D,Xbim.Common.Geometry.IVector3D)">
+            <summary>
+            If translation is defined, returns matrix translated by the vector
+            </summary>
+            <param name="matrix">Input matrix</param>
+            <param name="translation">Translation</param>
+            <returns>Translated matrix</returns>
+        </member>
+        <member name="M:Xbim.Ifc.Extractor.InsertCopy(Xbim.Common.IModel,System.Collections.Generic.IEnumerable{Xbim.Ifc4.Interfaces.IIfcProduct},System.Boolean,System.Boolean,System.IProgress{System.Double})">
+            <summary>
+            This is a higher level function which uses InsertCopy function alongside with the knowledge of IFC schema to copy over
+            products with their types and other related information (classification, aggregation, documents, properties) and optionally
+            geometry. It will also bring in spatial hierarchy relevant to selected products. However, resulting model is not guaranteed 
+            to be compliant with any Model View Definition unless you explicitly check the compliance. Context of a single product tend to 
+            consist from hundreds of objects which need to be identified and copied over so this operation might be potentially expensive.
+            You should never call this function more than once between two models. It not only selects objects to be copied over but also
+            excludes other objects from being coppied over so that it doesn't bring the entire model in a chain dependencies. This means
+            that some objects are modified (like spatial relations) and won't get updated which would lead to an inconsistent copy.
+            </summary>
+            <param name="target">The target model</param>
+            <param name="products">Products from other model to be inserted into this model</param>
+            <param name="includeGeometry">If TRUE, geometry of the products will be copied over.</param>
+            <param name="keepLabels">If TRUE, entity labels from original model will be used. Always set this to FALSE
+            if you are going to insert products from multiple source models or if you are going to insert products to a non-empty model</param>
+            <param name="progress">A progress delegate</param>
+        </member>
+        <member name="T:Xbim.Ifc.IfcStore">
+            <summary>
+            The <see cref="T:Xbim.Ifc.IfcStore"/> is the main entry point for working with Model files of any format.
+            
+            IfcStore handles opening, parsing, export, and (optionally persistence) of Ifc files in any format,
+            as well as accessing internal XBIM formats (such as *.xbim) files. 
+            </summary>
+            <remarks>
+            <para>
+            Note: the Store capabilities may be affected by the ModelProvider implementation - some stores may not
+            implement all capabilities. e.g. An In-Memory store will not permit saving to XBIM format.
+            </para>
+            <para>
+            IMPORTANT: By default, the v5 <see cref="T:Xbim.Ifc.IfcStore"/> will attempt to discover the 
+            HeuristicModelProvider (in the Esent assembly), by probing the app's loaded assemblies. 
+            This provider gives the same functionality as prior IfcStore versions. 
+            However, this will only be discovered if Xbim.IO.Esent dll has been 
+            referenced and loaded. ASP.NET apps do this automatically, but console and windows apps may not load the
+            DLL into the AppDomain unless a type is referenced.
+            If the store cannot be discover the Heuristic provider it will fall back to a <see cref="T:Xbim.IO.Memory.MemoryModelProvider"/>
+            which is less efficient with larger models.
+            </para>
+            <para>
+            To guarantee the correct provider regardless, configure <see cref="P:Xbim.Ifc.IfcStore.ModelProviderFactory"/> with the 
+            following code in your application initialisation:
+            <code>
+            IfcStore.ModelProviderFactory.UseHeuristicModelProvider();
+            </code>
+            </para>
+            </remarks>
+        </member>
+        <member name="M:Xbim.Ifc.IfcStore.#ctor(System.String,Xbim.Common.Step21.XbimSchemaVersion,Xbim.Ifc.XbimEditorCredentials)">
+            <summary>
+            Constructor used to create a new persistent model with specified path
+            </summary>
+            <param name="filepath"></param>
+            <param name="ifcVersion"></param>
+            <param name="editorDetails"></param>
+        </member>
+        <member name="M:Xbim.Ifc.IfcStore.#ctor(Xbim.IO.XbimStoreType,Xbim.Common.Step21.XbimSchemaVersion,Xbim.Ifc.XbimEditorCredentials)">
+            <summary>
+            Constructor used to create a new model for edit
+            </summary>
+            <param name="storageType"></param>
+            <param name="ifcVersion"></param>
+            <param name="editorDetails"></param>
+        </member>
+        <member name="P:Xbim.Ifc.IfcStore.ModelProvider">
+            <summary>
+            Provides access to model persistence capabilities
+            </summary>
+        </member>
+        <member name="P:Xbim.Ifc.IfcStore.ModelProviderFactory">
+            <summary>
+            Factory to create ModelProvider instances. 
+            </summary>
+            <remarks>Consumers can use this instance of <see cref="T:Xbim.IO.IModelProviderFactory"/> to control the 
+            implementations of IModel it uses.
+            In particular you can tell the factory to always use MemoryModel, or Esent model, or a blend (Heuristic)
+            </remarks>
+            <example>
+            To override the Store's backing model with an implementation you would use:
+            <code>
+            IfcStore.ModelProvider.Use(() => new MyCustomModelProvider());
+            </code>
+            </example>
+        </member>
+        <member name="M:Xbim.Ifc.IfcStore.SetupEditing(Xbim.Ifc.XbimEditorCredentials)">
+            <summary>
+            Sets up the model to track changes and apply an editor/ownerhistory
+            </summary>
+            <param name="editorDetails"></param>
+        </member>
+        <member name="M:Xbim.Ifc.IfcStore.Create(System.String,Xbim.Ifc.XbimEditorCredentials,Xbim.Common.Step21.XbimSchemaVersion)">
+            <summary>
+            Creates a Database store at the specified location
+            </summary>
+            <param name="filePath"></param>
+            <param name="editorDetails"></param>
+            <param name="ifcVersion"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xbim.Ifc.IfcStore.Open(System.IO.Stream,Xbim.IO.StorageType,Xbim.Common.Step21.XbimSchemaVersion,Xbim.IO.XbimModelType,Xbim.Ifc.XbimEditorCredentials,Xbim.IO.XbimDBAccess,Xbim.Common.ReportProgressDelegate,System.Int32)">
+            <summary>
+            You can use this function to open IFC model from a <see cref="T:System.IO.Stream"/>. 
+            You need to know file type (IFC, IFCZIP, IFCXML) and schema type (IFC2x3 or IFC4) to be able to use this function.
+            If you don't know, you should the overloaded <see cref="M:Xbim.Ifc.IfcStore.Open(System.String,Xbim.Ifc.XbimEditorCredentials,System.Nullable{System.Double},Xbim.Common.ReportProgressDelegate,Xbim.IO.XbimDBAccess,System.Int32)"/>
+            method which takes file paths as an argument, and can automatically detect schema and file type. 
+            If are opening an *.xbim file you should also use the path-based overload because Esent database needs to operate 
+            on the file and this function will have to create temporal file if it is not a file stream.
+            If the input is a FileStream, be aware this method may call <see cref="M:System.IO.Stream.Close"/> on it to keep exclusive access.
+            </summary>
+            <param name="stream">Stream of data</param>
+            <param name="dataType">Type of data (*.ifc, *.ifcxml, *.ifczip)</param>
+            <param name="schema">IFC schema (IFC2x3, IFC4). Other schemas are not supported by this class.</param>
+            <param name="modelType">Type of model to be used. You can choose between EsentModel and MemoryModel</param>
+            <param name="editorDetails">Optional details. You should always pass these if you are going to change the data.</param>
+            <param name="accessMode">Access mode to the stream. This is only important if you choose EsentModel. MemoryModel is completely in memory so this is not relevant</param>
+            <param name="progDelegate">Progress reporting delegate</param>
+            <param name="codePageOverride">
+            A CodePage that will be used to read implicitly encoded one-byte-char strings. If -1 is specified the default ISO8859-1
+            encoding will be used according to the Ifc specification. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Xbim.Ifc.IfcStore.Open(System.String,Xbim.Ifc.XbimEditorCredentials,System.Nullable{System.Double},Xbim.Common.ReportProgressDelegate,Xbim.IO.XbimDBAccess,System.Int32)">
+            <summary>
+            Opens an IFC file, Ifcxml, IfcZip, xbim from a file path
+            </summary>
+            <param name="path">the file name of the ifc, ifczip, ifcxml or xbim file to be opened</param>
+            <param name="editorDetails">This is only required if the store is opened for editing</param>
+            <param name="ifcDatabaseSizeThreshHold">Expressed in MB. If not defined the DefaultIfcDatabaseSizeThreshHold is used, 
+            IFC files below this size will be opened in memory, above this size a database will be created. If -1 is specified an in memory model will be 
+            created for all IFC files that are opened. Xbim files are always opened as databases</param>
+            <param name="progDelegate"></param>
+            <param name="accessMode"></param>
+            <param name="codePageOverride">
+            A CodePage that will be used to read implicitly encoded one-byte-char strings. If -1 is specified the default ISO8859-1
+            encoding will be used according to the Ifc specification. </param>
+        </member>
+        <member name="P:Xbim.Ifc.IfcStore.InstanceHandles">
+            <summary>
+            Returns a list of the handles to only the entities in this model
+            Note this do NOT include entities that are in any federated models
+            </summary>
+        </member>
+        <member name="M:Xbim.Ifc.IfcStore.Close">
+            <summary>
+            Closes the store and disposes of all resources. The store is invalid after this call
+            </summary>
+        </member>
+        <member name="P:Xbim.Ifc.IfcStore.DefaultOwningUser">
+            <summary>
+            Returns default user used to fill in owner history on new or modified objects. This object is only populated if
+            you provide XbimEditorCredentials in one of constructors
+            </summary>
+        </member>
+        <member name="P:Xbim.Ifc.IfcStore.DefaultOwningApplication">
+            <summary>
+            Returns default application used to fill in owner history on new or modified objects. This object is only populated if
+            you provide XbimEditorCredentials in one of constructors
+            </summary>
+        </member>
+        <member name="M:Xbim.Ifc.IfcStore.SaveAs(System.String,System.Nullable{Xbim.IO.StorageType},Xbim.Common.ReportProgressDelegate)">
+            <summary>
+            Saves the model to the specified file
+            </summary>
+            <param name="fileName">Name of the file to save to, if no format is specified the extension is used to determine the format</param>
+            <param name="format">if specified saves in the required format and changes the extension to the correct one</param>
+            <param name="progDelegate">reports on progress</param>
+        </member>
+        <member name="M:Xbim.Ifc.IfcStore.SaveAs(System.String,Xbim.IO.StorageType,Xbim.Common.ReportProgressDelegate)">
+            <summary>
+            Saves / Exports the model to a given file with the provided model format
+            </summary>
+            <param name="actualFileName"></param>
+            <param name="actualFormat">this will be correctly set</param>
+            <param name="progDelegate"></param>
+        </member>
+        <member name="M:Xbim.Ifc.IfcStore.AddModelReference(System.String,System.String,System.String)">
+            <summary>
+            Adds a model as a reference or federated model, do not call inside a transaction
+            </summary>
+            <param name="refModelPath"></param>
+            <param name="organisationName"></param>
+            <param name="organisationRole"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xbim.Ifc.IfcStore.AddModelReference(System.String,Xbim.Ifc2x3.ActorResource.IfcOrganization)">
+            <summary>
+            adds a model as a reference model can be called inside a transaction
+            </summary>
+            <param name="refModelPath">the file path of the xbim model to reference, this must be an xbim file</param>
+            <param name="owner">the actor who supplied the model</param>
+            <returns></returns>
+        </member>
+        <member name="M:Xbim.Ifc.IfcStore.AddModelReference(System.String,Xbim.Ifc4.ActorResource.IfcOrganization)">
+            <summary>
+            adds a model as a reference model can be called inside a transaction
+            </summary>
+            <param name="refModelPath">the file path of the xbim model to reference, this must be an xbim file</param>
+            <param name="owner">the actor who supplied the model</param>
+            <returns></returns>
+        </member>
+        <member name="M:Xbim.Ifc.IfcStore.LoadReferenceModels(System.Boolean)">
+            <summary>
+            All reference models are opened in a readonly mode.
+            Their children reference models is invoked iteratively.
+            
+            Loading referenced models defaults to avoiding Exception on file not found; in this way the federated model can still be opened and the error rectified.
+            </summary>
+            <param name="throwErrorOnReferenceModelExceptions">Set to true to enable your own error handling</param>
+        </member>
+        <member name="P:Xbim.Ifc.IfcStore.IsFederation">
+            <summary>
+            Returns true if the model contains reference models or the model has extension xBIMf
+            </summary>
+        </member>
+        <member name="M:Xbim.Ifc.IfcStore.Equals(Xbim.Common.IModel)">
+            <summary>
+            Returns true if it is another reference to this or if it is an embedded model
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xbim.Ifc.IfcStore.Equals(System.Object)">
+            <summary>
+            Returns true if it is another reference to this or if it is an embedded model
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Xbim.Ifc.Validation.IfcValidator">
+            <summary>
+            [Deprecated] use Xbim.Common.ExpressValidation.Validator instead
+            This class provides basic POCO access to validation errors.
+            Validation reporting should build upon this. For an example see <see cref="T:Xbim.Ifc.Validation.IfcValidationReporter"/>
+            </summary>
+        </member>
+        <member name="T:Xbim.Ifc.ViewModels.XbimModelViewModel">
+            <summary>
+            Model view for display top level Xbim Model contents and referenced models
+            </summary>
+        </member>
+        <member name="T:Xbim.Ifc.XbimColour">
+            <summary>
+            Represents a Colour in the model
+            </summary>
+        </member>
+        <member name="P:Xbim.Ifc.XbimColour.Name">
+            <summary>
+            Gets or sets Colour Name, defaults to its parts
+            </summary>
+        </member>
+        <member name="P:Xbim.Ifc.XbimColour.IsTransparent">
+            <summary>
+            True if the cuolour is not opaque
+            </summary>
+        </member>
+        <member name="M:Xbim.Ifc.XbimColour.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:Xbim.Ifc.XbimColour.#ctor(System.String,System.Single,System.Single,System.Single,System.Single)">
+            <summary>
+            Constructor for Material
+            </summary>
+            <param name="name">Material Name</param>
+            <param name="red">Red component Value (range 0 to 1.0 inclusive)</param>
+            <param name="green">Green Value (range 0 to 1.0 inclusive)</param>
+            <param name="blue">Blue Value (range 0 to 1.0 inclusive)</param>
+            <param name="alpha">Alpha Value (range 0 to 1.0 inclusive)</param>
+        </member>
+        <member name="M:Xbim.Ifc.XbimColour.#ctor(System.String,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            
+            </summary>
+            <param name="name">Material Name</param>
+            <param name="red">Red Value in range 0.0 to 1.0</param>
+            <param name="green">Green Value in range 0.0 to 1.0</param>
+            <param name="blue">Blue Value in range 0.0 to 1.0</param>
+            <param name="alpha">Alpha Value in range 0.0 to 1.0</param>
+        </member>
+        <member name="M:Xbim.Ifc.XbimColour.FromHSV(System.String,System.Double,System.Double,System.Double)">
+            <summary>
+            Creates a colour from Hue, Saturation and Value
+            </summary>
+            <param name="name">Color name</param>
+            <param name="hue">range 0..360</param>
+            <param name="saturation">range 0..1</param>
+            <param name="value">range 0..1</param>
+            <returns></returns>
+        </member>
+        <member name="P:Xbim.Ifc.XbimColour.Red">
+            <summary>
+            Gets or sets Red component Value in range from 0.0 to 1.0
+            </summary>
+        </member>
+        <member name="P:Xbim.Ifc.XbimColour.Green">
+            <summary>
+            Gets or sets Green component Value in range from 0.0 to 1.0
+            </summary>
+        </member>
+        <member name="P:Xbim.Ifc.XbimColour.Blue">
+            <summary>
+            Gets or sets Blue component Value in range from 0.0 to 1.0
+            </summary>
+        </member>
+        <member name="P:Xbim.Ifc.XbimColour.Alpha">
+            <summary>
+            Gets or sets transparency component Value in range from 0.0 to 1.0.
+            A value of 0.0 is completely transparent.
+            A value of 1.0 makes the colour fully opaque
+            </summary>
+        </member>
+        <member name="M:Xbim.Ifc.XbimColour.ToString">
+            <summary>
+            Returns a <see cref="T:System.String"/> that represents the value of this instance, ignoring the name.
+            </summary>
+            <returns>
+            A <see cref="T:System.String"/> that represents this instance; it can be used for persistence across invariante cultures if the name is not needed.
+            </returns>
+        </member>
+        <member name="F:Xbim.Ifc.StandardColourMaps.IfcProductTypeMap">
+            <summary>
+            Creates a colour map based on the IFC product types
+            </summary>
+        </member>
+        <member name="F:Xbim.Ifc.StandardColourMaps.Federation">
+            <summary>
+            Creates colour map sutiable to diversify models by role
+            </summary>
+        </member>
+        <member name="F:Xbim.Ifc.StandardColourMaps.Empty">
+            <summary>
+            Creates an empty colour map
+            </summary>
+        </member>
+        <member name="T:Xbim.Ifc.XbimColourMap">
+            <summary>
+            Provides a map for obtaining a colour for a keyed type, the colour is an ARGB value
+            </summary>
+        </member>
+        <member name="M:Xbim.Ifc.XbimColourMap.SetProductTypeColourMap">
+            <summary>
+            Initialises the colour map on default Xbim Type Colours
+            </summary>
+        </member>
+        <member name="T:Xbim.Ifc.XbimReferencedModel">
+            <summary>
+            A model that is referenced by another XbimModel
+            </summary>
+        </member>
+        <member name="P:Xbim.Ifc.XbimReferencedModel.Identifier">
+            <summary>
+            Returns the identifier for this reference within the scope of the referencing model
+            </summary>
+        </member>
+        <member name="T:Xbim.Ifc.XbimTexture">
+            <summary>
+            Class to hold the surface style or texture of an object, corresponds to IIfcSurfaceStyle and OpenGL Texture
+            Does not handle bitmap textured surfaces etc at present
+            </summary>
+        </member>
+        <member name="P:Xbim.Ifc.XbimTexture.DefinedObjectId">
+            <summary>
+            The object that this style defines
+            </summary>
+        </member>
+        <member name="M:Xbim.Ifc.XbimTexture.CreateTexture(System.Byte,System.Byte,System.Byte,System.Byte)">
+            <summary>
+            Sets the texture property for a single colour
+            </summary>
+            <param name="red">the red component of the colour in a range 0 to 255</param>
+            <param name="green">the green component of the colour in a range 0 to 255</param>
+            <param name="blue">the blue component of the colour in a range 0 to 255</param>
+            <param name="alpha">opaqueness of the colour in a range 0 to 255 (255 meaning completely opaque)</param>
+            <returns></returns>
+        </member>
+        <member name="M:Xbim.Ifc.XbimTexture.CreateTexture(System.Single,System.Single,System.Single,System.Single)">
+            <summary>
+            Sets the texture property for a single colour
+            </summary>
+            <param name="red">the red component of the colour in a range 0.0f to 1.0f</param>
+            <param name="green">the green component of the colour in a range 0.0f to 1.0f</param>
+            <param name="blue">the blue component of the colour in a range 0.0f to 1.0f</param>
+            <param name="alpha">opaqueness of the colour in a range 0.0f to 1.0f (1.0f meaning completely opaque)</param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

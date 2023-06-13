@@ -1,7 +1,7 @@
 # IFC-Unity-Editor-Plugin
 Load IFC files during design time into unity.
 
-##Features
+## Features
 * Load geometry of IFC files
 * Prepare the geometry for texture usage (done on loading and starting of a project including the package)
 * Load and link semantic information of IFC files

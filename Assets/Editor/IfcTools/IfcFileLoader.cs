@@ -179,6 +179,10 @@ public class IfcFileLoader : IDisposable
 
         entityLinker.LinkMaterials(parsedIfc, unityMaterials);
 
+        // add colliders
+        ColliderBuilder colliderBuilder = new ColliderBuilder();
+        colliderBuilder.BuildColliders(parsedIfc);
+
         //Mark scene as unsafed
         Scene activeScene = SceneManager.GetActiveScene();
         EditorSceneManager.MarkSceneDirty(activeScene);

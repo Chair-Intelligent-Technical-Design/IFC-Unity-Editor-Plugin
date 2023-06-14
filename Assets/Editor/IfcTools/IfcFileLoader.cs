@@ -170,8 +170,7 @@ public class IfcFileLoader : IDisposable
 
             foreach (IfcUnityMaterialLink mtlMaterial in unityMaterials)
             {
-                if (mtlMaterial.UnityMaterial.name.Contains("/"))
-                    mtlMaterial.UnityMaterial.name = mtlMaterial.UnityMaterial.name.Replace('/', '-');
+                mtlMaterial.UnityMaterial.name = mtlMaterial.UnityMaterial.name.Replace('/', '-').Replace("<","").Replace(">","");
                 AssetDatabase.CreateAsset(mtlMaterial.UnityMaterial, folderMaterials + "/" + mtlMaterial.UnityMaterial.name + ".mat");
             }
             AssetDatabase.Refresh();

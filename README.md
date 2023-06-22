@@ -20,7 +20,7 @@ A video tutorial may be found at https://vimeo.com/821292560. All binaries are i
 For this software, the [xBIM Toolkit](https://xbim.net/open-toolkit/) and [IfcConvert](https://github.com/IfcOpenShell/IfcOpenShell) have been used.
 
 ## Todo
-* Improve material parsing to address layered materials
+* ~~Improve material mapping to address material sets~~ available in code
 * Add layers to Gameobjects to distinguish between walls, windows, doors and floor
 * Check glass materials to ensure proper glass rendering
 * Adjust scaling to 1 or smaller

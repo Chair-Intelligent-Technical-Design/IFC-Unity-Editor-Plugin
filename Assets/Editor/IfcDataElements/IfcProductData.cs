@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
@@ -28,32 +30,11 @@ public class IfcProductData : MonoBehaviour
     public string Id;
 
     /// <summary>
-    /// Name of the related material
+    /// all related Materials
     /// </summary>
-    [ReadOnly]
-    public string MaterialName;
+    private List<IIfcMaterialSelect> internalRelatedMaterials = new List<IIfcMaterialSelect>();
 
-    /// <summary>
-    /// Related IFC material
-    /// </summary>
-    private IIfcMaterial internalIfcMaterial;
-
-    /// <summary>
-    /// Related IFC Material
-    /// </summary>
-    public IIfcMaterial IfcMaterial
-    {
-        get { return internalIfcMaterial; }
-        set 
-        { 
-            internalIfcMaterial = value;
-            if (internalIfcMaterial != null)
-            {
-                this.MaterialName = internalIfcMaterial.Name;
-            }
-        }
-    }
-
+    public IReadOnlyList<IIfcMaterialSelect> RelatedMaterials;
 
     /// <summary>
     /// Product of the object
@@ -71,22 +52,7 @@ public class IfcProductData : MonoBehaviour
             this.IfcClass = this.internalProduct.ExpressType.ExpressName;
             this.Label = this.internalProduct.EntityLabel;
             this.Id = this.internalProduct.GlobalId;
-            IIfcRelAssociatesMaterial assocMaterial = (IIfcRelAssociatesMaterial)this.internalProduct.HasAssociations.FirstOrDefault(x => x is IIfcRelAssociatesMaterial);
-            if (assocMaterial != null)
-            {
-                if (assocMaterial.RelatingMaterial is IIfcMaterial material)
-                {
-                    this.IfcMaterial = material;
-                }
-                else if (assocMaterial.RelatingMaterial is IIfcMaterialLayerSet materialLayerSet)
-                {
-                    this.IfcMaterial = this.ExtractMaterialFromLayerSet(materialLayerSet);
-                }
-                else if (assocMaterial.RelatingMaterial is IIfcMaterialLayerSetUsage layerUsage)
-                {
-                    this.IfcMaterial = this.ExtractMaterialFromLayerSet(layerUsage.ForLayerSet);
-                }
-            }
+            this.SetMaterials();
         }
     }
 
@@ -117,5 +83,64 @@ public class IfcProductData : MonoBehaviour
         }
 
         return null;
+    }
+
+    private void SetMaterials()
+    {
+        this.internalRelatedMaterials.Clear();
+        foreach (IIfcRelAssociatesMaterial assocMaterial in this.internalProduct.HasAssociations.Where(x => x is IIfcRelAssociatesMaterial))
+        {
+            this.internalRelatedMaterials.Add(assocMaterial.RelatingMaterial);
+            if (assocMaterial.RelatingMaterial is IIfcMaterialLayerSetUsage layerUsage)
+            {
+                this.AddLayerSetData(layerUsage.ForLayerSet);
+            }
+            else if (assocMaterial.RelatingMaterial is IIfcMaterialLayerSet layerSet)
+            {
+                this.AddLayerSetData(layerSet);
+            }
+            else if (assocMaterial.RelatingMaterial is IIfcMaterialLayer layer)
+            {
+                this.AddLayerData(layer);
+            }
+            else if (assocMaterial.RelatingMaterial is IIfcMaterialConstituentSet constitutentSet)
+            {
+                this.internalRelatedMaterials.Add(constitutentSet);
+                foreach (IIfcMaterialConstituent constiutent in constitutentSet.MaterialConstituents)
+                {
+                    this.AddConstitutentData(constiutent);
+                }
+            }
+            else if (assocMaterial.RelatingMaterial is IIfcMaterialConstituent constitutent)
+            {
+                this.AddConstitutentData(constitutent);
+            }
+            else if (assocMaterial.RelatingMaterial is IIfcMaterial material)
+            {
+                this.internalRelatedMaterials.Add(material);
+            }
+        }
+        this.RelatedMaterials = this.internalRelatedMaterials.AsReadOnly();
+    }
+
+    private void AddConstitutentData(IIfcMaterialConstituent constiutent)
+    {
+        this.internalRelatedMaterials.Add(constiutent);
+        this.internalRelatedMaterials.Add(constiutent.Material);
+    }
+
+    private void AddLayerSetData(IIfcMaterialLayerSet forLayerSet)
+    {
+        this.internalRelatedMaterials.Add(forLayerSet);
+        foreach (IIfcMaterialLayer layer in forLayerSet.MaterialLayers)
+        {
+            this.AddLayerData(layer);
+        }
+    }
+
+    private void AddLayerData(IIfcMaterialLayer layer)
+    {
+        this.internalRelatedMaterials.Add(layer);
+        this.internalRelatedMaterials.Add(layer.Material);
     }
 }

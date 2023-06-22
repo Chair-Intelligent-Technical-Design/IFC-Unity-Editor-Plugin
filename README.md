@@ -10,9 +10,18 @@ Load IFC files during design time into unity.
 * Automatic assignment of Unity materials to model (does not work for layered materials)
 * Assign colliders based on the IFC classes: IfcWall, IfcRoof, IfcBeam, IfcColumn, IfcSlab, IfcCurtainWall, IfcPlate, IfcStair, IfcStairFlight
 
-A video tutorial may be found at https://vimeo.com/821292560. All binaries are included in the release section. The source code does not contain IfcConvert. If you want to build the plugin on your own, you have to download IfcConvert on your own and include it in your project.
-
+## Download
 Download of the binaries in the [release section](https://github.com/Chair-Intelligent-Technical-Design/IFC-Unity-Editor-Plugin/releases).
 
+## Tutorial
+A video tutorial may be found at https://vimeo.com/821292560. All binaries are included in the release section. The source code does not contain IfcConvert. If you want to build the plugin on your own, you have to download IfcConvert on your own and include it in your project.
+
+## Acknowledgements
 For this software, the [xBIM Toolkit](https://xbim.net/open-toolkit/) and [IfcConvert](https://github.com/IfcOpenShell/IfcOpenShell) have been used.
 
+## Todo
+* Improve material parsing to address layered materials
+* Add layers to Gameobjects to distinguish between walls, windows, doors and floor
+* Check glass materials to ensure proper glass rendering
+* Adjust scaling to 1 or smaller
+* Make automatic UV-Generation switchable to save time during development

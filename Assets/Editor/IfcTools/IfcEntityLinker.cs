@@ -134,7 +134,7 @@ public class IfcEntityLinker
         {
             MaterialMapKeyValue entry = new MaterialMapKeyValue();
             entry.IfcMaterial = ifcMaterial;
-            materialMap.Add(entry.IfcMaterialName, entry);
+            materialMap.Add(entry.IfcLabel, entry);
 
             //add existing corresponding material
             if (unityMaterials != null)

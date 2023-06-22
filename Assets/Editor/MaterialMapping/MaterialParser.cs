@@ -65,7 +65,7 @@ public class MaterialParser
     public IfcUnityMaterialLink MaterialFromMtlString(IEnumerable<string> mtlLines)
     {
         IfcUnityMaterialLink result = new IfcUnityMaterialLink();
-        result.UnityMaterial = new Material(Shader.Find("Standard (Specular setup)"));
+        result.UnityMaterial = new Material(Shader.Find("Standard"));
 
         //regex that finds the material name and stores it in the gourp materialName
         string nameGroupMaterialName = "materialName";

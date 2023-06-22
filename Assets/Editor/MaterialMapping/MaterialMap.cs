@@ -3,23 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
+using Xbim.Ifc4.Interfaces;
 
 /// <summary>
 /// Mapping material names of the IFC and materials
 /// </summary>
 [Serializable]
-public class MaterialMap : MonoBehaviour, IDictionary<string,MaterialMapKeyValue>
+public class MaterialMap : MonoBehaviour, IDictionary<int,MaterialMapKeyValue>
 {
     /// <summary>
     /// Mappings of the materials
     /// </summary>
-    private Dictionary<string, MaterialMapKeyValue> internalMapping = new Dictionary<string, MaterialMapKeyValue>();
+    private Dictionary<int, MaterialMapKeyValue> internalMapping = new Dictionary<int, MaterialMapKeyValue>();
 
     public List<MaterialMapKeyValue> Mapping = new List<MaterialMapKeyValue>();
 
-    public MaterialMapKeyValue this[string key]
+    public MaterialMapKeyValue this[int key]
     {
-        get => ((IDictionary<string, MaterialMapKeyValue>)this.internalMapping)[key];
+        get => ((IDictionary<int, MaterialMapKeyValue>)this.internalMapping)[key];
         set
         {
             this.Mapping.Remove(this[key]);
@@ -34,67 +35,67 @@ public class MaterialMap : MonoBehaviour, IDictionary<string,MaterialMapKeyValue
     /// </summary>
     public GameObject BuildingModel { get; set; }
 
-    public ICollection<string> Keys => ((IDictionary<string, MaterialMapKeyValue>)this.internalMapping).Keys;
+    public ICollection<int> Keys => ((IDictionary<int, MaterialMapKeyValue>)this.internalMapping).Keys;
 
-    public ICollection<MaterialMapKeyValue> Values => ((IDictionary<string, MaterialMapKeyValue>)this.internalMapping).Values;
+    public ICollection<MaterialMapKeyValue> Values => ((IDictionary<int, MaterialMapKeyValue>)this.internalMapping).Values;
 
-    public int Count => ((ICollection<KeyValuePair<string, MaterialMapKeyValue>>)this.internalMapping).Count;
+    public int Count => ((ICollection<KeyValuePair<int, MaterialMapKeyValue>>)this.internalMapping).Count;
 
-    public bool IsReadOnly => ((ICollection<KeyValuePair<string, MaterialMapKeyValue>>)this.internalMapping).IsReadOnly;
+    public bool IsReadOnly => ((ICollection<KeyValuePair<int, MaterialMapKeyValue>>)this.internalMapping).IsReadOnly;
 
-    public void Add(string key, MaterialMapKeyValue value)
+    public void Add(int key, MaterialMapKeyValue value)
     {
-        ((IDictionary<string, MaterialMapKeyValue>)this.internalMapping).Add(key, value);
+        ((IDictionary<int, MaterialMapKeyValue>)this.internalMapping).Add(key, value);
         this.Mapping.Add(value);
     }
 
-    public void Add(KeyValuePair<string, MaterialMapKeyValue> item)
+    public void Add(KeyValuePair<int, MaterialMapKeyValue> item)
     {
-        ((ICollection<KeyValuePair<string, MaterialMapKeyValue>>)this.internalMapping).Add(item);
+        ((ICollection<KeyValuePair<int, MaterialMapKeyValue>>)this.internalMapping).Add(item);
         this.Mapping.Add(item.Value);
     }
 
     public void Clear()
     {
-        ((ICollection<KeyValuePair<string, MaterialMapKeyValue>>)this.internalMapping).Clear();
+        ((ICollection<KeyValuePair<int, MaterialMapKeyValue>>)this.internalMapping).Clear();
         this.Mapping.Clear();
     }
 
-    public bool Contains(KeyValuePair<string, MaterialMapKeyValue> item)
+    public bool Contains(KeyValuePair<int, MaterialMapKeyValue> item)
     {
-        return ((ICollection<KeyValuePair<string, MaterialMapKeyValue>>)this.internalMapping).Contains(item);
+        return ((ICollection<KeyValuePair<int, MaterialMapKeyValue>>)this.internalMapping).Contains(item);
     }
 
-    public bool ContainsKey(string key)
+    public bool ContainsKey(int key)
     {
-        return ((IDictionary<string, MaterialMapKeyValue>)this.internalMapping).ContainsKey(key);
+        return ((IDictionary<int, MaterialMapKeyValue>)this.internalMapping).ContainsKey(key);
     }
 
-    public void CopyTo(KeyValuePair<string, MaterialMapKeyValue>[] array, int arrayIndex)
+    public void CopyTo(KeyValuePair<int, MaterialMapKeyValue>[] array, int arrayIndex)
     {
-        ((ICollection<KeyValuePair<string, MaterialMapKeyValue>>)this.internalMapping).CopyTo(array, arrayIndex);
+        ((ICollection<KeyValuePair<int, MaterialMapKeyValue>>)this.internalMapping).CopyTo(array, arrayIndex);
     }
 
-    public IEnumerator<KeyValuePair<string, MaterialMapKeyValue>> GetEnumerator()
+    public IEnumerator<KeyValuePair<int, MaterialMapKeyValue>> GetEnumerator()
     {
-        return ((IEnumerable<KeyValuePair<string, MaterialMapKeyValue>>)this.internalMapping).GetEnumerator();
+        return ((IEnumerable<KeyValuePair<int, MaterialMapKeyValue>>)this.internalMapping).GetEnumerator();
     }
 
-    public bool Remove(string key)
+    public bool Remove(int key)
     {
         this.Mapping.Remove(this[key]);
-        return ((IDictionary<string, MaterialMapKeyValue>)this.internalMapping).Remove(key);
+        return ((IDictionary<int, MaterialMapKeyValue>)this.internalMapping).Remove(key);
     }
 
-    public bool Remove(KeyValuePair<string, MaterialMapKeyValue> item)
+    public bool Remove(KeyValuePair<int, MaterialMapKeyValue> item)
     {
         this.Mapping.Remove(item.Value);
-        return ((ICollection<KeyValuePair<string, MaterialMapKeyValue>>)this.internalMapping).Remove(item);
+        return ((ICollection<KeyValuePair<int, MaterialMapKeyValue>>)this.internalMapping).Remove(item);
     }
 
-    public bool TryGetValue(string key, out MaterialMapKeyValue value)
+    public bool TryGetValue(int key, out MaterialMapKeyValue value)
     {
-        return ((IDictionary<string, MaterialMapKeyValue>)this.internalMapping).TryGetValue(key, out value);
+        return ((IDictionary<int, MaterialMapKeyValue>)this.internalMapping).TryGetValue(key, out value);
     }
 
     IEnumerator IEnumerable.GetEnumerator()
@@ -139,28 +140,41 @@ public class MaterialMap : MonoBehaviour, IDictionary<string,MaterialMapKeyValue
             }
 
             //check if a material is assigned
-            if (ifcProduct.IfcMaterial == null)
+            if (ifcProduct.RelatedMaterials.Count == 0)
             {
                 Debug.Log("No IfcMaterial provided for " + ifcProduct.name + " with id " + ifcProduct.Id + ".");
                 continue;
             }
 
-            if (!this.ContainsKey(ifcProduct.MaterialName))
+            MaterialMapKeyValue kvPair = this.SearchForLabel(ifcProduct);
+            if (kvPair == null)
             {
-                Debug.Log("No mapping entry for " + ifcProduct.MaterialName + ".");
+                Debug.Log("No mapping entry for any material of " + ifcProduct.Label + ": " + ifcProduct.gameObject.name + ".");
                 continue;
             }
 
             //apply material
-            MaterialMapKeyValue kvPair = this[ifcProduct.MaterialName];
             if (kvPair.CorrespondingMaterial == null)
             {
-                Debug.Log("No Unity material set for " + ifcProduct.MaterialName);
+                Debug.Log("No Unity material set for " + ifcProduct.Label + ": " + ifcProduct.gameObject.name + ".");
             }
             else
             {
                 renderer.sharedMaterial = kvPair.CorrespondingMaterial;
             }
         }
+    }
+
+    private MaterialMapKeyValue SearchForLabel(IfcProductData ifcProduct)
+    {
+        foreach (IIfcMaterialSelect material in ifcProduct.RelatedMaterials)
+        {
+            if (this.ContainsKey(material.EntityLabel))
+            {
+                return this[material.EntityLabel];
+            }
+        }
+
+        return null;
     }
 }

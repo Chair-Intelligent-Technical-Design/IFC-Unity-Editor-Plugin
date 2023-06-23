@@ -18,34 +18,15 @@ using UnityEditor.SceneManagement;
 /// </summary>
 public class IfcFileLoader : IDisposable
 {
-    /// <summary>
-    /// Configuration object to store the configuration for the project
-    /// </summary>
-    private readonly Config configuration;
-
-    /// <summary>
-    /// path for the config file
-    /// </summary>
-    private readonly string configFilePath = @".\Assets\Editor\config.xml";
 
     /// <summary>
     /// default constructor
     /// </summary>
     public IfcFileLoader()
     {
-        if (!File.Exists(configFilePath))
-        {
-            this.configuration = new Config(true);
-            configuration.Serialize(configFilePath);
-        }
-        else
-        {
-            configuration = Config.Deserialize(configFilePath);
-        }
-
         Debug.Log("Starting IFC Unity Editor Plugin");
         Debug.Log("Current working directory: " + Directory.GetCurrentDirectory());
-        Debug.Log("IfcConvert Path: " + configuration.IfcConvertPath);
+        Debug.Log("IfcConvert Path: " + Config.CurrentConfig.IfcConvertPath);
     }
 
 
@@ -56,7 +37,7 @@ public class IfcFileLoader : IDisposable
     /// <param name="ifcConvertPath"></param>
     public void SetIfcConvertPath(string ifcConvertPath)
     {
-        this.configuration.IfcConvertPath = ifcConvertPath;
+        Config.CurrentConfig.IfcConvertPath = ifcConvertPath;
     }
 
     /// <summary>
@@ -65,7 +46,7 @@ public class IfcFileLoader : IDisposable
     /// <param name="outputPath"></param>
     public void SetOutputPath(string outputPath)
     {
-        this.configuration.OutputPath = outputPath;
+        Config.CurrentConfig.OutputPath = outputPath;
     }
 
     /// <summary>
@@ -75,24 +56,24 @@ public class IfcFileLoader : IDisposable
     /// <returns></returns>
     public GameObject LoadIfcFile(string ifcFilePath)
     {
-        if (!File.Exists(this.configuration.IfcConvertPath))
+        if (!File.Exists(Config.CurrentConfig.IfcConvertPath))
         {
             Debug.LogError("Could not find IfcConvert. Please set the path via IFC Tools/Set IfcConvert Path.");
             return null;
         }
 
-        if (!Directory.Exists(this.configuration.OutputPath))
+        if (!Directory.Exists(Config.CurrentConfig.OutputPath))
         {
-            Debug.Log("Output directory " + this.configuration.OutputPath + " does not exist. Create...");
-            Directory.CreateDirectory(this.configuration.OutputPath);
+            Debug.Log("Output directory " + Config.CurrentConfig.OutputPath + " does not exist. Create...");
+            Directory.CreateDirectory(Config.CurrentConfig.OutputPath);
         }
 
         Debug.Log("IFC file Path: " + ifcFilePath);
         string ifcFileName = Path.GetFileName(ifcFilePath);
         string objOutputFileName = ifcFileName.Replace("ifc", "obj");
         string mtlFileName = ifcFileName.Replace("ifc", "mtl");
-        string objOutputPath = Path.Combine(configuration.OutputPath, objOutputFileName).Replace('\\', '/');
-        string mtlOutputPath = Path.Combine(configuration.OutputPath, mtlFileName).Replace('\\', '/');
+        string objOutputPath = Path.Combine(Config.CurrentConfig.OutputPath, objOutputFileName).Replace('\\', '/');
+        string mtlOutputPath = Path.Combine(Config.CurrentConfig.OutputPath, mtlFileName).Replace('\\', '/');
         Debug.Log("obj output path: " + objOutputPath);
 
         //copy ifc file if necessary
@@ -210,7 +191,7 @@ public class IfcFileLoader : IDisposable
     private System.Diagnostics.ProcessStartInfo GenerateProcessInformation(string ifcFilePath, string outputPath)
     {
         System.Diagnostics.ProcessStartInfo ifcProcessInfo =
-            new System.Diagnostics.ProcessStartInfo(configuration.IfcConvertPath)
+            new System.Diagnostics.ProcessStartInfo(Config.CurrentConfig.IfcConvertPath)
             {
                 CreateNoWindow = false,
                 UseShellExecute = true

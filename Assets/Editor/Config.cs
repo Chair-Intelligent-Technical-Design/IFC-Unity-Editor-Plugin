@@ -8,8 +8,41 @@ using System;
 [Serializable]
 public class Config
 {
+    public static readonly string defaultPath = Path.Combine(Directory.GetCurrentDirectory() + @"\Assets\Editor\config.xml");
 
-    private string filePath = Path.Combine(Directory.GetCurrentDirectory() + @"\Assets\Editor\config.xml");
+    private string filePath = defaultPath;
+
+    /// <summary>
+    /// internal active configuration
+    /// </summary>
+    private static Config currentConfig;
+
+    /// <summary>
+    /// Last loaded config file or if no config loaded yet, the default one
+    /// </summary>
+    public static Config CurrentConfig 
+    { 
+        get
+        {
+            if (currentConfig != null)
+            {
+                return currentConfig;
+            }
+            else
+            {
+                if (File.Exists(defaultPath))
+                {
+                    return Config.Deserialize(defaultPath);
+                }
+                else
+                {
+                    currentConfig = new Config(true);
+                    currentConfig.Serialize(defaultPath);
+                    return currentConfig;
+                }
+            }
+        }
+    }
 
     /// <summary>
     /// automatically save the file after changes
@@ -69,6 +102,22 @@ public class Config
     } 
 
     private string outputPath = Path.Combine(Directory.GetCurrentDirectory() + @"\Assets\Meshes");
+
+    private bool automaticUVMapping = true;
+
+    /// <summary>
+    /// Is the UVMeshing run on every initialization
+    /// </summary>
+    public bool AutomaticTextureMapGeneration
+    {
+        get { return automaticUVMapping; }
+        set 
+        { 
+            automaticUVMapping = value;
+            this.Save();
+        }
+    }
+
 
     private static XmlSerializer serializer;
 
@@ -133,7 +182,8 @@ public class Config
     {
         using (FileStream stream = File.OpenRead(filePath))
         {
-            return Deserialize(stream);
+            currentConfig = Deserialize(stream);
+            return currentConfig;
         }
     }
 

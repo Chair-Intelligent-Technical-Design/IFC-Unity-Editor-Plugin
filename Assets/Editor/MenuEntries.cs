@@ -59,35 +59,53 @@ public static class MenuEntries
         }
     }
 
-    /// <summary>
-    /// Check the model for errors
-    /// </summary>
-    [MenuItem("IFC Tools/Check IFC links")]
-    public static void CheckIfcLinks()
+    [MenuItem("IFC Tools/Generate Texture Maps")]
+    static void GenerateTextureMaps()
     {
-        Debug.Log("Start IFC link checking...");
-        UnityModelChecker checker = new UnityModelChecker();
-        checker.CheckIfcLinking();
-        Debug.Log("Checking of IFC links finished.");
+        ModelInitializer.ActiveInitializer.GenerateTextureMaps();
     }
 
-    [MenuItem("IFC Tools/Check IFC Materials")]
-    public static void CheckIfcMaterial()
+    [MenuItem("IFC Tools/Enable Automatic Texture Map Generation")]
+    static void GenerateTextureMapsAutomaticallyEnable()
     {
-        Debug.Log("Start material checking...");
-        UnityModelChecker checker = new UnityModelChecker();
-        checker.CheckMaterial();
-        Debug.Log("Material checking finished.");
+        Config.CurrentConfig.AutomaticTextureMapGeneration = true;
     }
 
-    [MenuItem("IFC Tools/Check IFC Product")]
-    public static void CheckIfcProduct()
+    [MenuItem("IFC Tools/Disable Automatic Texture Map Generation")]
+    static void GenerateTextureMapsAutomaticallyDisable()
     {
-        Debug.Log("Start checking Product...");
-        UnityModelChecker checker = new UnityModelChecker();
-        checker.CheckSelectedProduct();
-        Debug.Log("Checking Product finished.");
+        Config.CurrentConfig.AutomaticTextureMapGeneration = false;
     }
+
+    ///// <summary>
+    ///// Check the model for errors
+    ///// </summary>
+    //[MenuItem("IFC Tools/Check IFC links")]
+    //public static void CheckIfcLinks()
+    //{
+    //    Debug.Log("Start IFC link checking...");
+    //    UnityModelChecker checker = new UnityModelChecker();
+    //    checker.CheckIfcLinking();
+    //    Debug.Log("Checking of IFC links finished.");
+    //}
+
+    //[MenuItem("IFC Tools/Check IFC Materials")]
+    //public static void CheckIfcMaterial()
+    //{
+    //    Debug.Log("Start material checking...");
+    //    UnityModelChecker checker = new UnityModelChecker();
+    //    checker.CheckMaterial();
+    //    Debug.Log("Material checking finished.");
+    //}
+
+    //[MenuItem("IFC Tools/Check IFC Product")]
+    //public static void CheckIfcProduct()
+    //{
+    //    Debug.Log("Start checking Product...");
+    //    UnityModelChecker checker = new UnityModelChecker();
+    //    checker.CheckSelectedProduct();
+    //    Debug.Log("Checking Product finished.");
+    //}
 }
 
 #endif

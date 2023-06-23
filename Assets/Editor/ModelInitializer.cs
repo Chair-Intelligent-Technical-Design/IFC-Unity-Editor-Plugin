@@ -15,11 +15,11 @@ internal class ModelInitializer : IDisposable
     /// <summary>
     /// static instance of an initializer
     /// </summary>
-    private static readonly ModelInitializer activeInitializer;
+    public static readonly ModelInitializer ActiveInitializer;
 
     static ModelInitializer()
     {
-        ModelInitializer.activeInitializer = new ModelInitializer();
+        ModelInitializer.ActiveInitializer = new ModelInitializer();
     }
 
     internal ModelInitializer()
@@ -27,12 +27,16 @@ internal class ModelInitializer : IDisposable
         EditorApplication.delayCall += this.DelayCallHandler;
     }
 
-    private void UpdateHandler()
+    private void DelayCallHandler()
     {
-        Debug.Log("UpdateHandler called.");
+        if (Config.CurrentConfig.AutomaticTextureMapGeneration)
+            this.GenerateTextureMaps();
     }
 
-    private void DelayCallHandler()
+    /// <summary>
+    /// Generates the texture maps for all gameobjects with geometry in the active scene
+    /// </summary>
+    public void GenerateTextureMaps()
     {
         //link IFC entities
         IfcEntityLinker entityLinker = new IfcEntityLinker();
@@ -57,7 +61,7 @@ internal class ModelInitializer : IDisposable
 
     public void Dispose()
     {
-        EditorApplication.delayCall -= this.DelayCallHandler;
+        EditorApplication.delayCall -= this.GenerateTextureMaps;
         //EditorApplication.update -= this.UpdateHandler;
     }
 }

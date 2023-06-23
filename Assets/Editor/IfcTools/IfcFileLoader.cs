@@ -141,7 +141,7 @@ public class IfcFileLoader : IDisposable
         string relativePath = Path.GetRelativePath(Directory.GetCurrentDirectory(), objOutputPath);
         GameObject parsedIfc = MonoBehaviour.Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>(relativePath));
         parsedIfc.name = Path.GetFileNameWithoutExtension(ifcFileName);
-        parsedIfc.transform.localScale = new Vector3(5, 5, 5);
+        parsedIfc.transform.localScale = new Vector3(1, 1, 1);
 
         parsedIfc.transform.Rotate(-90, 0, 0);
 

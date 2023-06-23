@@ -23,5 +23,5 @@ For this software, the [xBIM Toolkit](https://xbim.net/open-toolkit/) and [IfcCo
 * ~~Improve material mapping to address material sets~~
 * Add layers to Gameobjects to distinguish between walls, windows, doors and floor
 * ~~Check glass materials to ensure proper glass rendering~~
-* Adjust scaling to 1 or smaller
+* ~~Adjust scaling to 1 or smaller~~
 * Make automatic UV-Generation switchable to save time during development

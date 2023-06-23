@@ -6,7 +6,7 @@ using UnityEngine;
 using Xbim.Ifc4.Interfaces;
 
 /// <summary>
-/// Mapping material names of the IFC and materials
+/// Mapping of ifc and unity materials
 /// </summary>
 [Serializable]
 public class MaterialMap : MonoBehaviour, IDictionary<int,MaterialMapKeyValue>

@@ -7,7 +7,7 @@ using Xbim.Ifc;
 using Xbim.Ifc4.Interfaces;
 
 /// <summary>
-/// Links elements from the scene to related IFC entities
+/// Links elements from the scene to related IFC entities. This includes products (<see cref="IfcEntityLinker.LinkEntitiesByProductData(UnityEngine.GameObject, Xbim.Ifc.IfcStore)"/> and <see cref="IfcEntityLinker.LinkIfcEntitiesByName(UnityEngine.GameObject, Xbim.Ifc.IfcStore)"/>) and materials (<see cref="IfcEntityLinker.LinkMaterials(UnityEngine.GameObject, System.Collections.Generic.IEnumerable{IfcUnityMaterialLink})"/>)
 /// </summary>
 public class IfcEntityLinker
 {

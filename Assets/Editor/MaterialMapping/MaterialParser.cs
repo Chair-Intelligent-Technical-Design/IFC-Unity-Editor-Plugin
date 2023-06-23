@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 
 /// <summary>
-/// Parses an mtl file
+/// Parses an mtl file to unity materials
 /// </summary>
 public class MaterialParser
 {
@@ -62,7 +62,7 @@ public class MaterialParser
     /// </summary>
     /// <param name="mtlLines"></param>
     /// <returns></returns>
-    public IfcUnityMaterialLink MaterialFromMtlString(IEnumerable<string> mtlLines)
+    private IfcUnityMaterialLink MaterialFromMtlString(IEnumerable<string> mtlLines)
     {
         IfcUnityMaterialLink result = new IfcUnityMaterialLink();
         result.UnityMaterial = new Material(Shader.Find("Standard"));
@@ -86,7 +86,7 @@ public class MaterialParser
         Regex regexSpecularExp = new Regex(@"(?'specularExponent'^Ns) (?'" + valueName + @"'\d+)");
 
         //regex for transparency factor
-        Regex regexTransparency = new Regex(@"(?'transparency'^d) (?'" + valueName + @"'\d+.\d+)");
+        Regex regexTransparency = new Regex(@"(?'transparency'^d) (?'" + valueName + @"'\d*(\.?(\d*))?)");
 
         //culture to correctly parse floats
         CultureInfo cultureEng = CultureInfo.GetCultureInfo("en-US");

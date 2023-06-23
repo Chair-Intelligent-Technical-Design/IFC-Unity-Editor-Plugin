@@ -8,7 +8,11 @@ Load IFC files during design time into unity.
 * provide access to semantic IFC information on runtime and design time
 * Generate Unity material based on the material definitions in the IFC file
 * Automatic assignment of Unity materials to model (does not work for layered materials)
-* Assign colliders based on the IFC classes: IfcWall, IfcRoof, IfcBeam, IfcColumn, IfcSlab, IfcCurtainWall, IfcPlate, IfcStair, IfcStairFlight
+* Assign colliders based on the IFC classes: IfcWall, IfcRoof, IfcBeam, IfcColumn, IfcSlab, IfcCurtainWall, IfcPlate, IfcStair, IfcStairFlight, IfcRamp, IfcRampFlight
+* To ease interactions, all GameObjects are assigned to one of three layers automatically based on their IFC type.
+	* IfcWall, IfcWallStandardCase, IfcBeam, IfcColumn, IfcCurtainWall, IfcWindow and IfcPlate are added to layer 29 'Walls'
+	* IfcRoof, IfcSlab, IfcStair, IfcStairFlight, IfcSite, IfcRamp and IfcRampFlight are added to layer 30 'Grounds'
+	* IfcDoor and IfcDoorStandardCase are added to layer 31 'Doors'
 
 ## Download
 Download of the binaries in the [release section](https://github.com/Chair-Intelligent-Technical-Design/IFC-Unity-Editor-Plugin/releases).
@@ -21,7 +25,7 @@ For this software, the [xBIM Toolkit](https://xbim.net/open-toolkit/) and [IfcCo
 
 ## Todo
 * ~~Improve material mapping to address material sets~~
-* Add layers to Gameobjects to distinguish between walls, windows, doors and floor
+~~* Add layers to Gameobjects to distinguish between walls, windows, doors and floor~~
 * ~~Check glass materials to ensure proper glass rendering~~
 * ~~Adjust scaling to 1 or smaller~~
 * Make automatic UV-Generation switchable to save time during development

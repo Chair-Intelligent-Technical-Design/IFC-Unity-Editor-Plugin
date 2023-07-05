@@ -35,3 +35,6 @@ For this software, the [xBIM Toolkit](https://xbim.net/open-toolkit/) and [IfcCo
 * Extending Feature 5 to also cover layered and constitued materials
 * Adding feature 8
 * Adding feature 9
+
+### 1.3
+* Bugfix: the collider builder doesn't hinder the build process anymore
